@@ -1,2 +1,2 @@
-# mathem
-Backend assignment for mathem recruitment process.
+# Mathem
+Backend assignment for Mathem recruitment process.

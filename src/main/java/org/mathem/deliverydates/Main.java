@@ -1,4 +1,4 @@
-package org.mathem;
+package org.mathem.deliverydates;
 
 public class Main {
 
