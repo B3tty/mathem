@@ -88,20 +88,32 @@ public class DeliveryUtilsTest {
   }
 
   @Test
-  public void testIsExternalProduct() {
-    Product externalProduct = new Product(1, "Product 1", Arrays.asList(DayOfWeek.MONDAY), ProductType.EXTERNAL, 5);
-    Product normalProduct = new Product(2, "Product 2", Arrays.asList(DayOfWeek.TUESDAY), ProductType.NORMAL, 3);
-
-    assertTrue(DeliveryUtils.isExternalProduct(externalProduct));
-    assertFalse(DeliveryUtils.isExternalProduct(normalProduct));
+  public void testIsExternalProduct_WhenExternal_ShouldReturnTrue() {
+    assertTrue(DeliveryUtils.isExternalProduct(EXTERNAL_PRODUCT));
   }
 
   @Test
-  public void testIsTemporaryProduct() {
-    Product temporaryProduct = new Product(1, "Product 1", Arrays.asList(DayOfWeek.WEDNESDAY), ProductType.TEMPORARY, 0);
-    Product normalProduct = new Product(2, "Product 2", Arrays.asList(DayOfWeek.THURSDAY), ProductType.NORMAL, 3);
+  public void testIsExternalProduct_WhenNormal_ShouldReturnFalse() {
+    assertFalse(DeliveryUtils.isExternalProduct(NORMAL_PRODUCT));
+  }
 
-    assertTrue(DeliveryUtils.isTemporaryProduct(temporaryProduct));
-    assertFalse(DeliveryUtils.isTemporaryProduct(normalProduct));
+  @Test
+  public void testIsExternalProduct_WhenTemporary_ShouldReturnFalse() {
+    assertFalse(DeliveryUtils.isExternalProduct(TEMPORARY_PRODUCT));
+  }
+
+  @Test
+  public void testIsTemporaryProduct_WhenTemporary_ShouldReturnTrue() {
+    assertTrue(DeliveryUtils.isTemporaryProduct(TEMPORARY_PRODUCT));
+  }
+
+  @Test
+  public void testIsTemporaryProduct_WhenNormal_ShouldReturnFalse() {
+    assertFalse(DeliveryUtils.isTemporaryProduct(NORMAL_PRODUCT));
+  }
+
+  @Test
+  public void testIsTemporaryProduct_WhenExternal_ShouldReturnFalse() {
+    assertFalse(DeliveryUtils.isTemporaryProduct(EXTERNAL_PRODUCT));
   }
 }
