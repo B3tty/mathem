@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Delivery {
+public class DeliveryOption {
   private int postalCode;
   private LocalDate deliveryDate;
   private boolean isGreenDelivery;
