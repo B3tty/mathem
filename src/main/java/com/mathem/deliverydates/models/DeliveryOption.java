@@ -1,4 +1,4 @@
-package org.mathem.deliverydates.models;
+package com.mathem.deliverydates.models;
 
 import java.time.LocalDate;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class DeliveryOption {
-  private int postalCode;
+  private String postalCode;
   private LocalDate deliveryDate;
   private boolean isGreenDelivery;
 }
