@@ -1,8 +1,8 @@
 package com.mathem.deliverydates.services;
 
-import static com.mathem.deliverydates.utils.DeliveryUtils.formatDeliveryDate;
 import static com.mathem.deliverydates.utils.DeliveryUtils.getGreenDeliveryDates;
 import static com.mathem.deliverydates.utils.DeliveryUtils.isDeliveryDateValid;
+import static com.mathem.deliverydates.utils.DeliveryUtils.isDeliveryDateValidForTemporaryProducts;
 import static com.mathem.deliverydates.utils.DeliveryUtils.isDeliveryWeekdayValid;
 
 import com.mathem.deliverydates.models.DeliveryOption;
@@ -34,6 +34,7 @@ public class DeliveryService {
 
     for (LocalDate date = today; !date.isAfter(twoWeeksLater); date = date.plusDays(1)) {
       if (isDeliveryWeekdayValid(date, products) && isDeliveryDateValid(LocalDate.now(), date,
+          products) && isDeliveryDateValidForTemporaryProducts(LocalDate.now(), date,
           products)) {
         DeliveryOption deliveryOption = new DeliveryOption();
         deliveryOption.setPostalCode(postalCode);

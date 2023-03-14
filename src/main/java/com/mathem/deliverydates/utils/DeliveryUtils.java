@@ -2,14 +2,12 @@ package com.mathem.deliverydates.utils;
 
 import com.mathem.deliverydates.models.Product;
 import com.mathem.deliverydates.models.Product.ProductType;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -47,7 +45,7 @@ import java.util.List;
     }
 
     // Temporary products can only be ordered within the current week (Mon-Sun).
-    public static boolean isValidDateForTemporaryProduct(LocalDate fromDate, LocalDate targetDate,
+    public static boolean isDeliveryDateValidForTemporaryProduct(LocalDate fromDate, LocalDate targetDate,
         Product product) {
       if (product.getProductType() != ProductType.TEMPORARY) {
         return true;
@@ -56,7 +54,7 @@ import java.util.List;
 
       Calendar now = Calendar.getInstance();
       now.setTime(Date.from(fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-      int delta = -now.get(GregorianCalendar.DAY_OF_WEEK) + 2; //add 2 if your week start on monday
+      int delta = -now.get(GregorianCalendar.DAY_OF_WEEK) + 2; //add 2 because week starts on monday
       now.add(Calendar.DAY_OF_MONTH, delta ); // get beginning of week
       for (int i = 0; i < 7; i++)
       {
@@ -65,6 +63,17 @@ import java.util.List;
       }
 
       return validDates.contains(targetDate);
+    }
+
+
+    public static boolean isDeliveryDateValidForTemporaryProducts(LocalDate fromDate,
+        LocalDate targetDate,
+        List<Product> products) {
+      // Check if all products can be delivered on the given date, based on temporary product
+      // restriction
+      return products.stream()
+          .allMatch(product -> isDeliveryDateValidForTemporaryProduct(fromDate, targetDate,
+              product));
     }
   }
 
