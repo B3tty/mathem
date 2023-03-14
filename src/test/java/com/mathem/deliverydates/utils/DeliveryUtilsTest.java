@@ -8,6 +8,7 @@ import com.mathem.deliverydates.models.Product;
 import com.mathem.deliverydates.models.Product.ProductType;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import net.bytebuddy.asm.Advice.Local;
@@ -17,7 +18,9 @@ public class DeliveryUtilsTest {
 
   private static final LocalDate today = LocalDate.of(2023, 3, 13);
 
-    private static final Product NORMAL_PRODUCT = new Product(1, "Product 1",
+  private static final List<LocalDate> currentWeek = new ArrayList<>(List.of(LocalDate.of(2023, 3, 13), LocalDate.of(2023, 3, 14), LocalDate.of(2023, 3, 15), LocalDate.of(2023, 3, 16), LocalDate.of(2023, 3, 17), LocalDate.of(2023, 3, 18), LocalDate.of(2023, 3, 19)));
+
+  private static final Product NORMAL_PRODUCT = new Product(1, "Product 1",
         Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY),
         ProductType.NORMAL, 3);
 
@@ -88,32 +91,44 @@ public class DeliveryUtilsTest {
   }
 
   @Test
-  public void testIsExternalProduct_WhenExternal_ShouldReturnTrue() {
-    assertTrue(DeliveryUtils.isExternalProduct(EXTERNAL_PRODUCT));
+  public void testIsValidDateForTemporaryProduct_WhenTemporaryProduct_AndTodayIsMonday_ShouldReturnTrueForWholeWeek() {
+    for (LocalDate date : currentWeek) {
+      assertTrue(DeliveryUtils.isValidDateForTemporaryProduct(today, date, TEMPORARY_PRODUCT));
+    }
+    // Previous Sunday
+    assertFalse(DeliveryUtils.isValidDateForTemporaryProduct(today, LocalDate.of(2023, 3, 12), TEMPORARY_PRODUCT));
+    // Next Monday
+    assertFalse(DeliveryUtils.isValidDateForTemporaryProduct(today, LocalDate.of(2023, 3, 20), TEMPORARY_PRODUCT));
   }
 
   @Test
-  public void testIsExternalProduct_WhenNormal_ShouldReturnFalse() {
-    assertFalse(DeliveryUtils.isExternalProduct(NORMAL_PRODUCT));
+  public void testIsValidDateForTemporaryProduct_WhenTemporaryProduct_AndTodayIsNotMonday_ShouldReturnTrueForWholeWeek() {
+    LocalDate fromDate = LocalDate.of(2023, 3, 15); // Middle of the week
+    for (LocalDate date : currentWeek) {
+      assertTrue(DeliveryUtils.isValidDateForTemporaryProduct(fromDate, date, TEMPORARY_PRODUCT));
+    }
+    // Previous Sunday
+    assertFalse(DeliveryUtils.isValidDateForTemporaryProduct(fromDate, LocalDate.of(2023, 3, 12), TEMPORARY_PRODUCT));
+    // Next Monday
+    assertFalse(DeliveryUtils.isValidDateForTemporaryProduct(fromDate, LocalDate.of(2023, 3, 20), TEMPORARY_PRODUCT));
   }
 
   @Test
-  public void testIsExternalProduct_WhenTemporary_ShouldReturnFalse() {
-    assertFalse(DeliveryUtils.isExternalProduct(TEMPORARY_PRODUCT));
+  public void testIsValidDateForTemporaryProduct_WhenNotTemporaryProduct_ShouldReturnTrueAlways() {
+    LocalDate fromDate = LocalDate.of(2023, 3, 15); // Middle of the week
+    for (LocalDate date : currentWeek) {
+      assertTrue(DeliveryUtils.isValidDateForTemporaryProduct(fromDate, date, EXTERNAL_PRODUCT));
+      assertTrue(DeliveryUtils.isValidDateForTemporaryProduct(fromDate, date, NORMAL_PRODUCT));
+    }
+    // Previous Sunday
+    assertTrue(DeliveryUtils.isValidDateForTemporaryProduct(fromDate, LocalDate.of(2023, 3, 12), EXTERNAL_PRODUCT));
+    assertTrue(DeliveryUtils.isValidDateForTemporaryProduct(fromDate, LocalDate.of(2023, 3, 12), NORMAL_PRODUCT));
+    // Next Monday
+    assertTrue(DeliveryUtils.isValidDateForTemporaryProduct(fromDate, LocalDate.of(2023, 3, 20), EXTERNAL_PRODUCT));
+    assertTrue(DeliveryUtils.isValidDateForTemporaryProduct(fromDate, LocalDate.of(2023, 3, 20), NORMAL_PRODUCT));
   }
 
-  @Test
-  public void testIsTemporaryProduct_WhenTemporary_ShouldReturnTrue() {
-    assertTrue(DeliveryUtils.isTemporaryProduct(TEMPORARY_PRODUCT));
-  }
 
-  @Test
-  public void testIsTemporaryProduct_WhenNormal_ShouldReturnFalse() {
-    assertFalse(DeliveryUtils.isTemporaryProduct(NORMAL_PRODUCT));
-  }
 
-  @Test
-  public void testIsTemporaryProduct_WhenExternal_ShouldReturnFalse() {
-    assertFalse(DeliveryUtils.isTemporaryProduct(EXTERNAL_PRODUCT));
-  }
+
 }

@@ -20,7 +20,7 @@ public class Main {
         DayOfWeek.FRIDAY),
         ProductType.NORMAL,
         2));
-    productList.add(new Product(5678, "Product 2", List.of(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY),
+    productList.add(new Product(5678, "Product 2", List.of(DayOfWeek.MONDAY, DayOfWeek.THURSDAY),
         ProductType.EXTERNAL,
         5));
     productList.add(new Product(9012, "Product 3", List.of(DayOfWeek.MONDAY), ProductType.TEMPORARY, 0));
