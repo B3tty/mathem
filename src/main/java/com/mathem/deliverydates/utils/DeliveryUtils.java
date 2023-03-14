@@ -40,11 +40,6 @@ import java.util.List;
       return greenDeliveryDates;
     }
 
-    public static String formatDeliveryDate(LocalDate date) {
-      DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-      return (date.atStartOfDay(ZoneOffset.ofHours(1))).format(formatter);
-    }
-
     // Temporary products can only be ordered within the current week (Mon-Sun).
     public static boolean isDeliveryDateValidForTemporaryProduct(LocalDate fromDate, LocalDate targetDate,
         Product product) {

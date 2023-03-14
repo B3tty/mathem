@@ -81,15 +81,6 @@ public class DeliveryUtilsTest {
   }
 
   @Test
-  public void testFormatDeliveryDate() {
-    LocalDate date = LocalDate.of(2023, 3, 15);
-    String expectedDateStr = "2023-03-15T00:00:00+01:00";
-    String actualDateStr = DeliveryUtils.formatDeliveryDate(date);
-
-    assertEquals(expectedDateStr, actualDateStr);
-  }
-
-  @Test
   public void testIsDeliveryDateValidForTemporaryProduct_WhenTemporaryProduct_AndTodayIsMonday_ShouldReturnTrueForWholeWeek() {
     for (LocalDate date : currentWeek) {
       assertTrue(DeliveryUtils.isDeliveryDateValidForTemporaryProduct(today, date, TEMPORARY_PRODUCT));
@@ -126,5 +117,4 @@ public class DeliveryUtilsTest {
     assertTrue(DeliveryUtils.isDeliveryDateValidForTemporaryProduct(fromDate, LocalDate.of(2023, 3, 20), EXTERNAL_PRODUCT));
     assertTrue(DeliveryUtils.isDeliveryDateValidForTemporaryProduct(fromDate, LocalDate.of(2023, 3, 20), NORMAL_PRODUCT));
   }
-
 }
