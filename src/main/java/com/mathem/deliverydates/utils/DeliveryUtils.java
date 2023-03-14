@@ -14,6 +14,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
   public class DeliveryUtils {
+    public static final int DAYS_IN_ADVANCE_EXTERNAL_PRODUCT = 5;
 
     public static boolean isDeliveryWeekdayValid(LocalDate date, List<Product> products) {
       // Check if all the products can be delivered on the given weekday
@@ -74,6 +75,14 @@ import java.util.List;
       return products.stream()
           .allMatch(product -> isDeliveryDateValidForTemporaryProduct(fromDate, targetDate,
               product));
+    }
+
+    // All external products need to be ordered 5 days in advance
+    public static boolean isDeliveryDateValidForExternalProducts(LocalDate fromDate,
+        LocalDate targetDate,
+        List<Product> products) {
+      return products.stream()
+          .allMatch(product -> (product.getProductType() != ProductType.EXTERNAL) || (targetDate.isAfter(fromDate.plusDays(DAYS_IN_ADVANCE_EXTERNAL_PRODUCT-1))));
     }
   }
 
