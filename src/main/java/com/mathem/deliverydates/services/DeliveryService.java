@@ -16,17 +16,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DeliveryService {
-
-  /*
-  - A delivery date is not valid if a product can't be delivered on that weekday.
-  - A delivery date is not valid if the customer has ordered a product that cannot be delivered in time.
-  This is determined by the daysInAdvance property on the product. I.E. if the product needs to be
-  ordered 4 days in advance, all delivery days before today + 4 are invalid as the product cannot be
-  delivered on time.
-  - All external products need to be ordered 5 days in advance.
-  - Temporary products can only be ordered within the current week (Mon-Sun)
-   */
-
   public List<DeliveryOption> getDeliveryOptions(String postalCode, List<Product> products) {
     List<DeliveryOption> deliveryOptions = new ArrayList<>();
     LocalDate today = LocalDate.now();
@@ -50,6 +39,4 @@ public class DeliveryService {
         .thenComparing(DeliveryOption::getDeliveryDate));
     return deliveryOptions;
   }
-
-
 }
